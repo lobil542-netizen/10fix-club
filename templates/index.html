@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מועדון לקוחות 10FIX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Heebo', Arial, sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      direction: rtl;
+    }
+
+    /* HEADER */
+    .header {
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 2px;
+    }
+
+    .logo .num { color: #fff; }
+    .logo .fix { color: #a0a0a0; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(160deg, #000 0%, #1a1a1a 60%, #2d2d2d 100%);
+      color: #fff;
+      text-align: center;
+      padding: 50px 24px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '🪙';
+      position: absolute;
+      font-size: 180px;
+      opacity: 0.04;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .hero .badge {
+      display: inline-block;
+      background: #fff;
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 span {
+      color: #a0a0a0;
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: #888;
+      line-height: 1.7;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    /* PERKS */
+    .perks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 20px 16px;
+      background: #f5f5f7;
+    }
+
+    .perk {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .perk .icon { font-size: 26px; margin-bottom: 8px; }
+    .perk .title { font-size: 12px; font-weight: 700; color: #000; }
+    .perk .desc { font-size: 11px; color: #888; margin-top: 3px; }
+
+    /* SERVICES STRIP */
+    .services-strip {
+      background: #000;
+      display: flex;
+      overflow-x: auto;
+      padding: 16px;
+      gap: 10px;
+      scrollbar-width: none;
+    }
+
+    .services-strip::-webkit-scrollbar { display: none; }
+
+    .svc {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 12px 16px;
+      white-space: nowrap;
+      font-size: 13px;
+      color: #fff;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .svc span { margin-left: 6px; }
+
+    /* FORM SECTION */
+    .form-section {
+      padding: 28px 16px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .form-header h2 {
+      font-size: 22px;
+      font-weight: 900;
+      color: #000;
+    }
+
+    .form-header p {
+      font-size: 13px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .form-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 14px 16px;
+      background: #f5f5f7;
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      color: #000;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      font-family: 'Heebo', Arial, sans-serif;
+    }
+
+    input:focus {
+      background: #fff;
+      border-color: #000;
+    }
+
+    input::placeholder { color: #bbb; }
+
+    .consent-box {
+      background: #f5f5f7;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+
+    .consent-box label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: #555;
+      font-size: 12px;
+      line-height: 1.6;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .consent-box input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: #000;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 17px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Heebo', Arial, sans-serif;
+      transition: opacity 0.2s;
+    }
+
+    .submit-btn:active { opacity: 0.8; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 24px 16px;
+      color: #aaa;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    /* SUCCESS */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 80px 30px;
+    }
+
+    .success-screen .check { font-size: 64px; margin-bottom: 20px; }
+
+    .success-screen h2 {
+      font-size: 26px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .success-screen p { color: #888; font-size: 15px; line-height: 1.7; }
+  </style>
+</head>
+<body>
+
+<div id="main-content">
+
+  <div class="header">
+    <div class="logo">
+      <span class="num">10</span><span class="fix">FIX</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="badge">מועדון לקוחות VIP</div>
+    <h1>תיקון סלולרי<br><span>מהיר. זול. מקצועי.</span></h1>
+    <p>הצטרפו למועדון וקבלו הנחות בלעדיות,<br>עדכונים ומבצעים ישירות אליכם</p>
+  </div>
+
+  <div class="services-strip">
+    <div class="svc"><span>📱</span>תיקון מסך</div>
+    <div class="svc"><span>⌚</span>Apple Watch</div>
+    <div class="svc"><span>🔋</span>החלפת סוללה</div>
+    <div class="svc"><span>🔊</span>תיקון רמקול</div>
+    <div class="svc"><span>🔧</span>כל תיקון</div>
+    <div class="svc"><span>🛡️</span>אביזרים</div>
+  </div>
+
+  <div class="perks">
+    <div class="perk">
+      <div class="icon">🏷️</div>
+      <div class="title">הנחות</div>
+      <div class="desc">בלעדי לחברי המועדון</div>
+    </div>
+    <div class="perk">
+      <div class="icon">⚡</div>
+      <div class="title">מבצעים</div>
+      <div class="desc">ראשונים לדעת</div>
+    </div>
+    <div class="perk">
+      <div class="icon">📲</div>
+      <div class="title">עדכונים</div>
+      <div class="desc">ישירות לטלפון</div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-header">
+      <h2>הצטרפות למועדון</h2>
+      <p>מלאו את הפרטים ונהיה בקשר</p>
+    </div>
+
+    <div class="form-card">
+      <form id="clubForm">
+        <div class="form-group">
+          <label>שם מלא</label>
+          <input type="text" name="full_name" placeholder="ישראל ישראלי" required>
+        </div>
+        <div class="form-group">
+          <label>עיר מגורים</label>
+          <input type="text" name="city" placeholder="כרמיאל" required>
+        </div>
+        <div class="form-group">
+          <label>טלפון</label>
+          <input type="tel" name="phone" placeholder="050-0000000" required>
+        </div>
+        <div class="form-group">
+          <label>אימייל (אופציונלי)</label>
+          <input type="email" name="email" placeholder="example@gmail.com">
+        </div>
+
+        <div class="consent-box">
+          <label>
+            <input type="checkbox" name="marketing_consent" required>
+            <span>אני מאשר/ת קבלת עדכונים שיווקיים, מבצעים והנחות מ-10FIX כרמיאל. ניתן לבטל בכל עת.</span>
+          </label>
+        </div>
+
+        <button type="submit" class="submit-btn">הצטרפות חינמית →</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer">
+    <strong style="color:#000">10FIX כרמיאל 🪙</strong><br>
+    הגנה 37, כרמיאל<br>
+    כל הפרטים נשמרים בצורה מאובטחת · © 2026
+  </div>
+
+</div>
+
+<div class="success-screen" id="success-screen">
+  <div class="check">🎉</div>
+  <h2>ברוכים הבאים למועדון!</h2>
+  <p>הפרטים שלכם נשמרו בהצלחה.<br>נשמח לעדכן אתכם על מבצעים<br>והנחות בלעדיות.<br><br>
+  <strong>10FIX כרמיאל 🪙</strong></p>
+</div>
+
+<script>
+  document.getElementById('clubForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+      full_name: form.full_name.value,
+      city: form.city.value,
+      phone: form.phone.value,
+      email: form.email.value,
+      marketing_consent: form.marketing_consent.checked
+    };
+    try {
+      const res = await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        document.getElementById('main-content').style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+        window.scrollTo(0,0);
+      } else {
+        alert('שגיאה בשמירה, נסה שוב');
+      }
+    } catch(err) {
+      alert('שגיאת חיבור, נסה שוב');
+    }
+  });
+</script>
+
+</body>
+</html>
