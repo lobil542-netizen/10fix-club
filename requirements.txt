@@ -1,3 +1,5 @@
 flask
 openpyxl
 qrcode[pil]
+gunicorn 
+gunicorn 
