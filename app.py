@@ -82,6 +82,10 @@ def admin():
     customers = get_customers()
     return render_template("admin.html", customers=customers, total=len(customers))
 
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
 @app.route("/admin/logout")
 def admin_logout():
     session.pop("admin", None)
