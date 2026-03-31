@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.secret_key = "10fix_secret_2026"
 
 EXCEL_FILE = "customers.xlsx"
+PURCHASES_FILE = "purchases.xlsx"
 ADMIN_PASSWORD = "10fix2026"
 
 def init_excel():
@@ -19,6 +20,16 @@ def init_excel():
         for cell in ws[1]:
             cell.font = cell.font.copy(bold=True)
         wb.save(EXCEL_FILE)
+
+def init_purchases():
+    if not os.path.exists(PURCHASES_FILE):
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "רכישות"
+        ws.append(["תאריך", "מזהה לקוח", "שם לקוח", "פריט", "מחיר", "הערה"])
+        for cell in ws[1]:
+            cell.font = cell.font.copy(bold=True)
+        wb.save(PURCHASES_FILE)
 
 def get_customers():
     init_excel()
@@ -44,6 +55,38 @@ def get_customer_by_uid(uid):
         if c["uid"] == uid:
             return c
     return None
+
+def get_purchases(uid=None):
+    init_purchases()
+    wb = load_workbook(PURCHASES_FILE)
+    ws = wb.active
+    purchases = []
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if row[1]:
+            p = {
+                "date":     row[0] or "",
+                "uid":      row[1] or "",
+                "name":     row[2] or "",
+                "item":     row[3] or "",
+                "price":    row[4] or "",
+                "note":     row[5] or ""
+            }
+            if uid is None or p["uid"] == uid:
+                purchases.append(p)
+    purchases.sort(key=lambda x: x["date"], reverse=True)
+    return purchases
+
+def get_purchase_stats():
+    purchases = get_purchases()
+    stats = {}
+    for p in purchases:
+        uid = p["uid"]
+        if uid not in stats:
+            stats[uid] = {"count": 0, "last": ""}
+        stats[uid]["count"] += 1
+        if not stats[uid]["last"] or p["date"] > stats[uid]["last"]:
+            stats[uid]["last"] = p["date"]
+    return stats
 
 @app.route("/")
 def index():
@@ -90,16 +133,35 @@ def admin():
         return render_template("admin_login.html", error=None)
 
     customers = get_customers()
-    return render_template("admin.html", customers=customers, total=len(customers))
+    stats = get_purchase_stats()
+    return render_template("admin.html", customers=customers, total=len(customers), stats=stats)
 
-@app.route("/admin/customer/<uid>")
+@app.route("/admin/customer/<uid>", methods=["GET", "POST"])
 def customer_card(uid):
     if not session.get("admin"):
         return redirect(url_for("admin"))
     customer = get_customer_by_uid(uid)
     if not customer:
         return "לקוח לא נמצא", 404
-    return render_template("customer_card.html", customer=customer)
+
+    if request.method == "POST":
+        item  = request.form.get("item", "").strip()
+        price = request.form.get("price", "").strip()
+        note  = request.form.get("note", "").strip()
+        if item:
+            init_purchases()
+            wb = load_workbook(PURCHASES_FILE)
+            ws = wb.active
+            ws.append([
+                datetime.now().strftime("%d/%m/%Y %H:%M"),
+                uid, customer["name"], item, price, note
+            ])
+            wb.save(PURCHASES_FILE)
+        return redirect(url_for("customer_card", uid=uid))
+
+    purchases = get_purchases(uid)
+    total_spent = sum(float(p["price"]) for p in purchases if p["price"] and str(p["price"]).replace('.','').isdigit())
+    return render_template("customer_card.html", customer=customer, purchases=purchases, total_spent=total_spent)
 
 @app.route("/terms")
 def terms():
@@ -112,6 +174,7 @@ def admin_logout():
 
 if __name__ == "__main__":
     init_excel()
+    init_purchases()
     print("=" * 40)
     print("10FIX מועדון לקוחות - שרת פעיל")
     print("כתובת: http://localhost:5000")

@@ -12,87 +12,242 @@
       background: #0a0a0a;
       color: #fff;
       direction: rtl;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      padding: 24px 16px 60px;
     }
-    .card {
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 24px;
-      padding: 36px 28px;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-    .logo { font-size: 18px; font-weight: 900; letter-spacing: 3px; color: #fff; margin-bottom: 4px; }
-    .logo span { color: #888; }
-    .divider { height: 1px; background: #1e1e1e; margin: 20px 0; }
-    .name { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 4px; }
-    .city { font-size: 14px; color: #666; margin-bottom: 24px; }
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    .info-row:last-of-type { border-bottom: none; }
-    .info-label { font-size: 11px; color: #555; letter-spacing: 1px; font-weight: 700; }
-    .info-value { font-size: 14px; color: #ccc; font-weight: 600; }
-    .badge-yes { background: #1a2e1a; color: #4caf50; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
-    .badge-no  { background: #1e1e1e; color: #666; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
-    .uid { font-size: 11px; color: #333; margin-top: 20px; letter-spacing: 2px; }
+    .wrap { max-width: 520px; margin: 0 auto; }
+
     .back-btn {
-      margin-top: 24px;
       display: inline-block;
       color: #555;
       font-size: 13px;
       text-decoration: none;
       border: 1px solid #222;
-      padding: 10px 24px;
-      border-radius: 10px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      margin-bottom: 24px;
       transition: color 0.2s, border-color 0.2s;
     }
     .back-btn:hover { color: #fff; border-color: #555; }
+
+    .profile-card {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 16px;
+    }
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .avatar {
+      width: 56px; height: 56px;
+      background: #1e1e1e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .profile-name { font-size: 22px; font-weight: 900; }
+    .profile-city { font-size: 13px; color: #666; margin-top: 2px; }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .info-box {
+      background: #0a0a0a;
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .info-box .label { font-size: 10px; color: #555; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
+    .info-box .value { font-size: 14px; color: #ccc; font-weight: 600; }
+    .info-box .value a { color: #fff; text-decoration: none; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat-box {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 16px;
+      padding: 18px 12px;
+      text-align: center;
+    }
+    .stat-box .num { font-size: 26px; font-weight: 900; color: #fff; }
+    .stat-box .lbl { font-size: 11px; color: #555; margin-top: 4px; }
+
+    .section-title {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #555;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    /* ADD PURCHASE FORM */
+    .add-form {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .form-row input {
+      flex: 1;
+      padding: 12px 14px;
+      background: #0a0a0a;
+      border: 1px solid #222;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      font-family: 'Heebo', Arial, sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-row input:focus { border-color: #555; }
+    .form-row input::placeholder { color: #333; }
+    .add-btn {
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Heebo', Arial, sans-serif;
+    }
+
+    /* PURCHASES LIST */
+    .purchases-wrap {
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .purchase-item {
+      padding: 16px 20px;
+      border-bottom: 1px solid #1a1a1a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .purchase-item:last-child { border-bottom: none; }
+    .purchase-item .item-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .purchase-item .item-note { font-size: 12px; color: #555; margin-top: 2px; }
+    .purchase-item .item-date { font-size: 11px; color: #444; }
+    .purchase-item .item-price {
+      font-size: 16px;
+      font-weight: 900;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .empty { text-align: center; padding: 40px; color: #333; font-size: 14px; }
+
+    .badge-yes { background: #1a2e1a; color: #4caf50; padding: 3px 10px; border-radius: 20px; font-size: 11px; }
+    .badge-no  { background: #1e1e1e; color: #555; padding: 3px 10px; border-radius: 20px; font-size: 11px; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="logo">10<span>FIX</span></div>
-    <div class="divider"></div>
-    <div class="name">{{ customer.name }}</div>
-    <div class="city">{{ customer.city }}</div>
-
-    <div class="info-row">
-      <span class="info-label">טלפון</span>
-      <span class="info-value"><a href="tel:{{ customer.phone }}" style="color:#fff;text-decoration:none">{{ customer.phone }}</a></span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">אימייל</span>
-      <span class="info-value">{{ customer.email or "—" }}</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">תאריך הצטרפות</span>
-      <span class="info-value">{{ customer.date }}</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">אישור שיווק</span>
-      <span class="info-value">
-        {% if customer.consent == "כן" %}
-        <span class="badge-yes">כן</span>
-        {% else %}
-        <span class="badge-no">לא</span>
-        {% endif %}
-      </span>
-    </div>
-
-    <div class="uid">ID: {{ customer.uid }}</div>
-  </div>
+<div class="wrap">
 
   <a href="/admin" class="back-btn">← חזרה לרשימה</a>
+
+  <!-- פרופיל -->
+  <div class="profile-card">
+    <div class="profile-top">
+      <div class="avatar">{{ customer.name[0] }}</div>
+      <div>
+        <div class="profile-name">{{ customer.name }}</div>
+        <div class="profile-city">{{ customer.city }}</div>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="label">טלפון</div>
+        <div class="value"><a href="tel:{{ customer.phone }}">{{ customer.phone }}</a></div>
+      </div>
+      <div class="info-box">
+        <div class="label">אימייל</div>
+        <div class="value">{{ customer.email or "—" }}</div>
+      </div>
+      <div class="info-box">
+        <div class="label">הצטרפות</div>
+        <div class="value">{{ customer.date }}</div>
+      </div>
+      <div class="info-box">
+        <div class="label">שיווק</div>
+        <div class="value">
+          {% if customer.consent == "כן" %}<span class="badge-yes">מאושר</span>
+          {% else %}<span class="badge-no">לא</span>{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- סטטיסטיקות -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="num">{{ purchases|length }}</div>
+      <div class="lbl">רכישות</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">₪{{ total_spent|int }}</div>
+      <div class="lbl">סה״כ הוצאה</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">{{ purchases[0].date.split(' ')[0] if purchases else '—' }}</div>
+      <div class="lbl">רכישה אחרונה</div>
+    </div>
+  </div>
+
+  <!-- הוסף רכישה -->
+  <div class="section-title">+ הוסף רכישה</div>
+  <div class="add-form">
+    <form method="POST">
+      <div class="form-row">
+        <input type="text" name="item" placeholder="פריט / שירות" required>
+        <input type="number" name="price" placeholder="מחיר ₪" style="max-width:110px">
+      </div>
+      <div class="form-row">
+        <input type="text" name="note" placeholder="הערה (אופציונלי)">
+      </div>
+      <button type="submit" class="add-btn">שמור רכישה</button>
+    </form>
+  </div>
+
+  <!-- היסטוריה -->
+  <div class="section-title">היסטוריית רכישות</div>
+  <div class="purchases-wrap">
+    {% if purchases %}
+      {% for p in purchases %}
+      <div class="purchase-item">
+        <div>
+          <div class="item-name">{{ p.item }}</div>
+          {% if p.note %}<div class="item-note">{{ p.note }}</div>{% endif %}
+          <div class="item-date">{{ p.date }}</div>
+        </div>
+        <div class="item-price">{% if p.price %}₪{{ p.price }}{% else %}—{% endif %}</div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">אין רכישות עדיין</div>
+    {% endif %}
+  </div>
+
+</div>
 </body>
 </html>
