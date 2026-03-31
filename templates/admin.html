@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ניהול לקוחות - 10FIX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Heebo', Arial, sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      direction: rtl;
+    }
+    .header {
+      background: #000;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { font-size: 20px; font-weight: 900; color: #fff; }
+    .logo .fix { color: #888; }
+    .logout {
+      color: #888;
+      font-size: 13px;
+      text-decoration: none;
+      border: 1px solid #444;
+      padding: 6px 14px;
+      border-radius: 8px;
+      transition: color 0.2s;
+    }
+    .logout:hover { color: #fff; border-color: #fff; }
+
+    .stats {
+      background: #000;
+      padding: 0 24px 24px;
+      display: flex;
+      gap: 16px;
+    }
+    .stat {
+      background: #1a1a1a;
+      border-radius: 14px;
+      padding: 16px 24px;
+      color: #fff;
+      text-align: center;
+    }
+    .stat .num { font-size: 32px; font-weight: 900; }
+    .stat .label { font-size: 12px; color: #888; margin-top: 2px; }
+
+    .content { padding: 24px 16px; max-width: 900px; margin: 0 auto; }
+
+    .search-bar {
+      margin-bottom: 16px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #fff;
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      font-family: 'Heebo', Arial, sans-serif;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: border-color 0.2s;
+    }
+    .search-bar input:focus { border-color: #000; }
+
+    .table-wrap {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #000; color: #fff; }
+    thead th {
+      padding: 14px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: right;
+      letter-spacing: 0.5px;
+    }
+    tbody tr { border-bottom: 1px solid #f0f0f0; transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f9f9f9; }
+    tbody td { padding: 13px 16px; font-size: 14px; }
+    .td-name { font-weight: 700; }
+    .td-phone a { color: #000; text-decoration: none; font-weight: 600; }
+    .td-phone a:hover { text-decoration: underline; }
+    .td-date { color: #aaa; font-size: 12px; }
+    .badge-yes {
+      background: #e8f5e9; color: #2e7d32;
+      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+    }
+    .badge-no {
+      background: #f5f5f5; color: #999;
+      padding: 3px 10px; border-radius: 20px; font-size: 11px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .col-email, .col-city { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">10<span class="fix">FIX</span> · ניהול לקוחות</div>
+  <a href="/admin/logout" class="logout">יציאה</a>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="num">{{ total }}</div>
+    <div class="label">לקוחות רשומים</div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="חיפוש לפי שם, טלפון, עיר..." oninput="filterTable()">
+  </div>
+
+  <div class="table-wrap">
+    {% if customers %}
+    <table id="customersTable">
+      <thead>
+        <tr>
+          <th>שם מלא</th>
+          <th class="col-city">עיר</th>
+          <th>טלפון</th>
+          <th class="col-email">אימייל</th>
+          <th>שיווק</th>
+          <th class="col-date">תאריך</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in customers %}
+        <tr>
+          <td class="td-name">{{ c.name }}</td>
+          <td class="col-city">{{ c.city }}</td>
+          <td class="td-phone"><a href="tel:{{ c.phone }}">{{ c.phone }}</a></td>
+          <td class="col-email">{{ c.email }}</td>
+          <td>
+            {% if c.consent == "כן" %}
+            <span class="badge-yes">כן</span>
+            {% else %}
+            <span class="badge-no">לא</span>
+            {% endif %}
+          </td>
+          <td class="td-date col-date">{{ c.date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">אין לקוחות עדיין</div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  function filterTable() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#customersTable tbody tr');
+    rows.forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }
+</script>
+
+</body>
+</html>
