@@ -31,6 +31,19 @@ def init_purchases():
             cell.font = cell.font.copy(bold=True)
         wb.save(PURCHASES_FILE)
 
+def migrate_uids():
+    """תן מזהה לכל לקוח שאין לו"""
+    init_excel()
+    wb = load_workbook(EXCEL_FILE)
+    ws = wb.active
+    changed = False
+    for row in ws.iter_rows(min_row=2):
+        if row[1].value and (len(row) < 7 or not row[6].value):
+            row[6].value = str(uuid.uuid4())[:8]
+            changed = True
+    if changed:
+        wb.save(EXCEL_FILE)
+
 def get_customers():
     init_excel()
     wb = load_workbook(EXCEL_FILE)
@@ -132,6 +145,7 @@ def admin():
     if not session.get("admin"):
         return render_template("admin_login.html", error=None)
 
+    migrate_uids()
     customers = get_customers()
     stats = get_purchase_stats()
     return render_template("admin.html", customers=customers, total=len(customers), stats=stats)
@@ -174,6 +188,7 @@ def admin_logout():
 
 if __name__ == "__main__":
     init_excel()
+    migrate_uids()
     init_purchases()
     print("=" * 40)
     print("10FIX מועדון לקוחות - שרת פעיל")
