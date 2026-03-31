@@ -8,215 +8,276 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C96A;
+      --gold-dim: rgba(201,168,76,0.15);
+    }
+
     body {
       font-family: 'Heebo', Arial, sans-serif;
-      background: #f5f5f7;
-      color: #1d1d1f;
+      background: #080808;
+      color: #fff;
       direction: rtl;
+      overflow-x: hidden;
     }
 
     /* HEADER */
     .header {
-      background: rgba(0,0,0,0.92);
-      backdrop-filter: blur(10px);
-      position: sticky;
+      position: fixed;
       top: 0;
+      width: 100%;
       z-index: 100;
-      padding: 14px 20px;
+      padding: 18px 24px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
     }
 
     .logo {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 900;
+      letter-spacing: 4px;
       color: #fff;
-      letter-spacing: 2px;
     }
-
-    .logo .num { color: #fff; }
-    .logo .fix { color: #a0a0a0; }
+    .logo .fix { color: var(--gold); }
 
     /* HERO */
     .hero {
-      background: linear-gradient(160deg, #000 0%, #1a1a1a 60%, #2d2d2d 100%);
-      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 50px 24px 44px;
+      padding: 100px 24px 60px;
       position: relative;
       overflow: hidden;
     }
 
     .hero::before {
-      content: '🪙';
+      content: '';
       position: absolute;
-      font-size: 180px;
-      opacity: 0.04;
-      top: -20px;
+      top: -200px;
       left: 50%;
       transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+      pointer-events: none;
     }
 
-    .hero .badge {
-      display: inline-block;
-      background: #fff;
-      color: #000;
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(201,168,76,0.4);
+      color: var(--gold);
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 2px;
-      padding: 5px 16px;
-      border-radius: 20px;
-      margin-bottom: 18px;
+      letter-spacing: 3px;
+      padding: 8px 20px;
+      border-radius: 30px;
+      margin-bottom: 32px;
+      background: var(--gold-dim);
+      animation: fadeUp 0.8s ease both;
     }
 
     .hero h1 {
-      font-size: 32px;
+      font-size: clamp(38px, 8vw, 64px);
       font-weight: 900;
-      line-height: 1.25;
-      margin-bottom: 12px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+      animation: fadeUp 0.8s 0.1s ease both;
     }
 
-    .hero h1 span {
-      color: #a0a0a0;
-    }
+    .hero h1 .accent { color: var(--gold); }
 
     .hero p {
-      font-size: 15px;
+      font-size: 16px;
       color: #888;
-      line-height: 1.7;
-      max-width: 320px;
+      line-height: 1.8;
+      max-width: 340px;
+      margin: 0 auto 48px;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #444;
+      font-size: 11px;
+      letter-spacing: 2px;
+      animation: pulse 2s infinite;
+    }
+
+    /* SERVICES */
+    .section {
+      padding: 80px 24px;
+      max-width: 600px;
       margin: 0 auto;
     }
 
-    /* PERKS */
-    .perks {
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .services-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      padding: 20px 16px;
-      background: #f5f5f7;
+      margin-bottom: 80px;
     }
 
-    .perk {
-      background: #fff;
+    .svc-card {
+      background: #111;
+      border: 1px solid #1e1e1e;
       border-radius: 16px;
-      padding: 18px 10px;
+      padding: 20px 12px;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: border-color 0.3s, transform 0.3s;
     }
 
-    .perk .icon { font-size: 26px; margin-bottom: 8px; }
-    .perk .title { font-size: 12px; font-weight: 700; color: #000; }
-    .perk .desc { font-size: 11px; color: #888; margin-top: 3px; }
-
-    /* SERVICES STRIP */
-    .services-strip {
-      background: #000;
-      display: flex;
-      overflow-x: auto;
-      padding: 16px;
-      gap: 10px;
-      scrollbar-width: none;
+    .svc-card:hover {
+      border-color: rgba(201,168,76,0.3);
+      transform: translateY(-2px);
     }
 
-    .services-strip::-webkit-scrollbar { display: none; }
+    .svc-card .icon { font-size: 24px; margin-bottom: 10px; }
+    .svc-card .name { font-size: 12px; font-weight: 700; color: #ddd; }
 
-    .svc {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 12px 16px;
-      white-space: nowrap;
-      font-size: 13px;
-      color: #fff;
-      font-weight: 600;
-      flex-shrink: 0;
+    /* PERKS */
+    .perks-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 80px;
     }
 
-    .svc span { margin-left: 6px; }
+    .perk-card {
+      background: linear-gradient(135deg, #111 0%, #0d0d0d 100%);
+      border: 1px solid #1e1e1e;
+      border-radius: 16px;
+      padding: 24px 16px;
+      text-align: center;
+    }
 
-    /* FORM SECTION */
-    .form-section {
-      padding: 28px 16px;
+    .perk-card .num {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .perk-card .label { font-size: 11px; color: #666; letter-spacing: 1px; }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #222, transparent);
+      margin: 0 24px 80px;
+    }
+
+    /* FORM */
+    .form-wrap {
       max-width: 480px;
       margin: 0 auto;
+      padding: 0 20px 80px;
     }
 
-    .form-header {
+    .form-title {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 32px;
     }
 
-    .form-header h2 {
-      font-size: 22px;
+    .form-title h2 {
+      font-size: 26px;
       font-weight: 900;
-      color: #000;
+      margin-bottom: 8px;
     }
 
-    .form-header p {
-      font-size: 13px;
-      color: #888;
-      margin-top: 4px;
-    }
+    .form-title p { font-size: 13px; color: #555; }
 
     .form-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 24px 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      background: #0e0e0e;
+      border: 1px solid #1e1e1e;
+      border-radius: 24px;
+      padding: 32px 24px;
     }
 
-    .form-group {
-      margin-bottom: 14px;
-    }
+    .form-group { margin-bottom: 16px; }
 
     label {
       display: block;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: #555;
-      margin-bottom: 6px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
     }
 
     input[type="text"],
     input[type="email"],
     input[type="tel"] {
       width: 100%;
-      padding: 14px 16px;
-      background: #f5f5f7;
-      border: 1.5px solid transparent;
+      padding: 15px 18px;
+      background: #161616;
+      border: 1px solid #2a2a2a;
       border-radius: 12px;
-      color: #000;
-      font-size: 16px;
+      color: #fff;
+      font-size: 15px;
       outline: none;
       transition: border-color 0.2s, background 0.2s;
       font-family: 'Heebo', Arial, sans-serif;
     }
 
     input:focus {
-      background: #fff;
-      border-color: #000;
+      border-color: var(--gold);
+      background: #1a1a1a;
     }
 
-    input::placeholder { color: #bbb; }
+    input::placeholder { color: #333; }
 
     .consent-box {
-      background: #f5f5f7;
+      background: #0a0a0a;
+      border: 1px solid #1e1e1e;
       border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 18px;
+      padding: 16px;
+      margin-bottom: 20px;
     }
 
     .consent-box label {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
+      gap: 12px;
       color: #555;
       font-size: 12px;
       line-height: 1.6;
       cursor: pointer;
       font-weight: 400;
+      letter-spacing: 0;
     }
 
     .consent-box input[type="checkbox"] {
@@ -224,50 +285,81 @@
       height: 18px;
       margin-top: 2px;
       flex-shrink: 0;
-      accent-color: #000;
+      accent-color: var(--gold);
     }
 
     .submit-btn {
       width: 100%;
-      padding: 17px;
-      background: #000;
-      color: #fff;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: #000;
       border: none;
       border-radius: 14px;
-      font-size: 17px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 900;
       cursor: pointer;
       font-family: 'Heebo', Arial, sans-serif;
-      transition: opacity 0.2s;
+      letter-spacing: 1px;
+      transition: opacity 0.2s, transform 0.2s;
     }
 
-    .submit-btn:active { opacity: 0.8; }
+    .submit-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .submit-btn:active { opacity: 0.8; transform: translateY(0); }
 
     /* FOOTER */
     .footer {
       text-align: center;
-      padding: 24px 16px;
-      color: #aaa;
-      font-size: 11px;
-      line-height: 1.8;
+      padding: 32px 16px 48px;
+      color: #333;
+      font-size: 12px;
+      line-height: 2;
+      border-top: 1px solid #111;
     }
+    .footer strong { color: #555; }
 
     /* SUCCESS */
     .success-screen {
       display: none;
       text-align: center;
-      padding: 80px 30px;
+      padding: 100px 30px;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background: #080808;
     }
 
-    .success-screen .check { font-size: 64px; margin-bottom: 20px; }
+    .success-screen .check {
+      font-size: 72px;
+      margin-bottom: 24px;
+      animation: pop 0.5s ease;
+    }
 
     .success-screen h2 {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 900;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      color: var(--gold);
     }
 
-    .success-screen p { color: #888; font-size: 15px; line-height: 1.7; }
+    .success-screen p { color: #555; font-size: 15px; line-height: 1.8; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -275,48 +367,50 @@
 <div id="main-content">
 
   <div class="header">
-    <div class="logo">
-      <span class="num">10</span><span class="fix">FIX</span>
-    </div>
+    <div class="logo">10<span class="fix">FIX</span></div>
   </div>
 
   <div class="hero">
-    <div class="badge">מועדון לקוחות VIP</div>
-    <h1>תיקון סלולרי<br><span>מהיר. זול. מקצועי.</span></h1>
-    <p>הצטרפו למועדון וקבלו הנחות בלעדיות,<br>עדכונים ומבצעים ישירות אליכם</p>
+    <div class="badge">★ מועדון לקוחות VIP</div>
+    <h1>תיקון סלולרי<br><span class="accent">ברמה אחרת.</span></h1>
+    <p>הצטרפו למועדון וקבלו גישה להנחות בלעדיות, מבצעים ראשונים ושירות מהיר</p>
+    <div class="scroll-hint">▼ &nbsp; גלול למטה</div>
   </div>
 
-  <div class="services-strip">
-    <div class="svc"><span>📱</span>תיקון מסך</div>
-    <div class="svc"><span>⌚</span>Apple Watch</div>
-    <div class="svc"><span>🔋</span>החלפת סוללה</div>
-    <div class="svc"><span>🔊</span>תיקון רמקול</div>
-    <div class="svc"><span>🔧</span>כל תיקון</div>
-    <div class="svc"><span>🛡️</span>אביזרים</div>
+  <div class="section">
+    <div class="section-label">השירותים שלנו</div>
+    <div class="services-grid">
+      <div class="svc-card"><div class="icon">📱</div><div class="name">תיקון מסך</div></div>
+      <div class="svc-card"><div class="icon">⌚</div><div class="name">Apple Watch</div></div>
+      <div class="svc-card"><div class="icon">🔋</div><div class="name">סוללה</div></div>
+      <div class="svc-card"><div class="icon">🔊</div><div class="name">רמקול</div></div>
+      <div class="svc-card"><div class="icon">🔧</div><div class="name">כל תיקון</div></div>
+      <div class="svc-card"><div class="icon">🛡️</div><div class="name">אביזרים</div></div>
+    </div>
+
+    <div class="section-label">יתרונות המועדון</div>
+    <div class="perks-row">
+      <div class="perk-card">
+        <div class="num">10%</div>
+        <div class="label">הנחה קבועה</div>
+      </div>
+      <div class="perk-card">
+        <div class="num">VIP</div>
+        <div class="label">שירות מועדפים</div>
+      </div>
+      <div class="perk-card">
+        <div class="num">∞</div>
+        <div class="label">מבצעים</div>
+      </div>
+    </div>
   </div>
 
-  <div class="perks">
-    <div class="perk">
-      <div class="icon">🏷️</div>
-      <div class="title">הנחות</div>
-      <div class="desc">בלעדי לחברי המועדון</div>
-    </div>
-    <div class="perk">
-      <div class="icon">⚡</div>
-      <div class="title">מבצעים</div>
-      <div class="desc">ראשונים לדעת</div>
-    </div>
-    <div class="perk">
-      <div class="icon">📲</div>
-      <div class="title">עדכונים</div>
-      <div class="desc">ישירות לטלפון</div>
-    </div>
-  </div>
+  <div class="divider"></div>
 
-  <div class="form-section">
-    <div class="form-header">
+  <div class="form-wrap">
+    <div class="form-title">
       <h2>הצטרפות למועדון</h2>
-      <p>מלאו את הפרטים ונהיה בקשר</p>
+      <p>חינמי לחלוטין · ניתן לבטל בכל עת</p>
     </div>
 
     <div class="form-card">
@@ -345,24 +439,24 @@
           </label>
         </div>
 
-        <button type="submit" class="submit-btn">הצטרפות חינמית →</button>
+        <button type="submit" class="submit-btn">הצטרפות חינמית ←</button>
       </form>
     </div>
   </div>
 
   <div class="footer">
-    <strong style="color:#000">10FIX כרמיאל 🪙</strong><br>
+    <strong>10FIX כרמיאל</strong><br>
     הגנה 37, כרמיאל<br>
     כל הפרטים נשמרים בצורה מאובטחת · © 2026
   </div>
 
 </div>
 
-<div class="success-screen" id="success-screen">
-  <div class="check">🎉</div>
-  <h2>ברוכים הבאים למועדון!</h2>
+<div class="success-screen" id="success-screen" style="display:none">
+  <div class="check">🏆</div>
+  <h2>ברוכים הבאים!</h2>
   <p>הפרטים שלכם נשמרו בהצלחה.<br>נשמח לעדכן אתכם על מבצעים<br>והנחות בלעדיות.<br><br>
-  <strong>10FIX כרמיאל 🪙</strong></p>
+  <strong style="color: var(--gold)">10FIX כרמיאל</strong></p>
 </div>
 
 <script>
@@ -384,8 +478,9 @@
       });
       if (res.ok) {
         document.getElementById('main-content').style.display = 'none';
-        document.getElementById('success-screen').style.display = 'block';
-        window.scrollTo(0,0);
+        const s = document.getElementById('success-screen');
+        s.style.display = 'flex';
+        window.scrollTo(0, 0);
       } else {
         alert('שגיאה בשמירה, נסה שוב');
       }
