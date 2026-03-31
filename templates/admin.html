@@ -125,7 +125,45 @@
     <div class="num">{{ total }}</div>
     <div class="label">לקוחות רשומים</div>
   </div>
+  <div class="stat" id="todayVisitStat">
+    <div class="num" id="todayCount">0</div>
+    <div class="label">כניסות היום</div>
+  </div>
 </div>
+
+<!-- פאנל כניסות חי -->
+<div id="checkinPanel" style="background:#0a1a0a;border-bottom:1px solid #1a2a1a;padding:0 24px 16px;">
+  <div style="display:flex;align-items:center;gap:8px;padding:12px 0 10px;">
+    <span style="width:8px;height:8px;background:#4caf50;border-radius:50%;display:inline-block;animation:pulse 1.5s infinite;"></span>
+    <span style="color:#4caf50;font-size:12px;font-weight:700;">כניסות לעסק - חי</span>
+  </div>
+  <div id="checkinList" style="display:flex;flex-direction:column;gap:8px;max-height:160px;overflow-y:auto;"></div>
+  <div id="noVisits" style="color:#555;font-size:13px;display:none;">אין כניסות עדיין</div>
+</div>
+
+<style>
+  @keyframes pulse {
+    0%,100%{opacity:1} 50%{opacity:0.3}
+  }
+  @keyframes slideIn {
+    from{opacity:0;transform:translateX(-12px)}
+    to{opacity:1;transform:translateX(0)}
+  }
+  .checkin-item {
+    background:#111;
+    border:1px solid #1a2a1a;
+    border-radius:10px;
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    animation: slideIn 0.3s ease;
+  }
+  .checkin-item.new-entry { border-color:#2e7d32; }
+  .checkin-name { font-weight:700;font-size:14px;color:#fff; }
+  .checkin-phone { color:#666;font-size:12px; }
+  .checkin-time { color:#4caf50;font-size:11px;margin-right:auto; }
+</style>
 
 <div class="content">
   <div class="search-bar">
@@ -188,6 +226,60 @@
       row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
     });
   }
+
+  // --- כניסות חי ---
+  let lastSeen = null;
+  let todayStr = new Date().toLocaleDateString('he-IL', {day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\./g, '/');
+
+  function renderVisits(visits) {
+    const list = document.getElementById('checkinList');
+    const noVisits = document.getElementById('noVisits');
+    const todayCountEl = document.getElementById('todayCount');
+
+    if (!visits.length) {
+      list.innerHTML = '';
+      noVisits.style.display = 'block';
+      todayCountEl.textContent = '0';
+      return;
+    }
+    noVisits.style.display = 'none';
+
+    // ספירת היום
+    const today = new Date().toLocaleDateString('he-IL', {day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\./g,'/');
+    const todayVisits = visits.filter(v => v.date && v.date.startsWith(today));
+    todayCountEl.textContent = todayVisits.length;
+
+    // בדיקה אם יש חדש
+    const newestDate = visits[0] ? visits[0].date : null;
+    const isNew = lastSeen !== null && newestDate !== lastSeen;
+    if (isNew) {
+      // צליל / פלאש ויזואלי
+      document.getElementById('checkinPanel').style.background = '#0d2a0d';
+      setTimeout(() => { document.getElementById('checkinPanel').style.background = '#0a1a0a'; }, 1000);
+    }
+    lastSeen = newestDate;
+
+    list.innerHTML = visits.map((v, i) => `
+      <div class="checkin-item${i===0 && isNew?' new-entry':''}">
+        <span style="font-size:18px;">✅</span>
+        <div>
+          <div class="checkin-name">${v.name}</div>
+          <div class="checkin-phone">${v.phone}</div>
+        </div>
+        <div class="checkin-time">${v.date ? v.date.split(' ')[1] || v.date : ''}</div>
+      </div>
+    `).join('');
+  }
+
+  function pollCheckins() {
+    fetch('/api/recent-checkins')
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) renderVisits(data); })
+      .catch(() => {});
+  }
+
+  pollCheckins();
+  setInterval(pollCheckins, 5000);
 </script>
 
 </body>

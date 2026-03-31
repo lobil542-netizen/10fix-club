@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>כניסה לעסק - 10FIX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Heebo', Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .logo {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .logo span { color: #666; }
+    .subtitle {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: #111;
+      border-radius: 20px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+    .card h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    input[type="tel"] {
+      width: 100%;
+      padding: 14px 16px;
+      background: #1a1a1a;
+      border: 1.5px solid #333;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 20px;
+      font-family: 'Heebo', Arial, sans-serif;
+      text-align: center;
+      outline: none;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    input[type="tel"]:focus { border-color: #555; }
+    input[type="tel"]::placeholder { color: #444; letter-spacing: 0; font-size: 15px; }
+    button {
+      width: 100%;
+      padding: 15px;
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Heebo', Arial, sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #e0e0e0; }
+
+    .error {
+      background: #1a0a0a;
+      border: 1px solid #5a1a1a;
+      color: #ff6b6b;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    /* הצלחה */
+    .success-icon {
+      font-size: 72px;
+      margin-bottom: 16px;
+      animation: pop 0.4s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      80% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .success-name {
+      font-size: 26px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .success-msg {
+      color: #888;
+      font-size: 15px;
+    }
+    .success-badge {
+      display: inline-block;
+      background: #0d2a0d;
+      color: #4caf50;
+      border: 1px solid #2e7d32;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 16px;
+    }
+
+    /* לא נמצא */
+    .notfound-icon { font-size: 64px; margin-bottom: 16px; }
+    .notfound-msg { color: #ff6b6b; font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .notfound-sub { color: #666; font-size: 13px; }
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      color: #888;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      font-family: 'Heebo', Arial, sans-serif;
+      width: auto;
+      padding: 0;
+    }
+    .back-btn:hover { color: #fff; background: none; }
+  </style>
+</head>
+<body>
+
+<div class="logo">10<span>FIX</span></div>
+<div class="subtitle">מועדון לקוחות</div>
+
+<div class="card">
+
+  {% if success %}
+    <div class="success-icon">✅</div>
+    <div class="success-name">שלום, {{ name }}!</div>
+    <div class="success-msg">כניסתך נרשמה בהצלחה</div>
+    <div class="success-badge">לקוח מועדון מאומת</div>
+
+  {% elif not_found %}
+    <div class="notfound-icon">❌</div>
+    <div class="notfound-msg">המספר לא נמצא במועדון</div>
+    <div class="notfound-sub">פנה לנציג לרישום</div>
+    <button class="back-btn" onclick="history.back()">נסה שוב</button>
+
+  {% else %}
+    <h2>כניסה לעסק</h2>
+    <p>הזן את מספר הטלפון שלך כדי לאמת שאתה חבר מועדון</p>
+    <form method="POST" action="/checkin">
+      <input type="tel" name="phone" placeholder="050-0000000" inputmode="numeric" autofocus required>
+      {% if error %}
+      <div class="error">{{ error }}</div>
+      {% endif %}
+      <button type="submit">כניסה ✓</button>
+    </form>
+  {% endif %}
+
+</div>
+
+</body>
+</html>
