@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ customer.name }} - 10FIX</title>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -229,6 +230,14 @@
     </form>
   </div>
 
+  <!-- QR כרטיס -->
+  <div class="section-title">כרטיס לקוח להדפסה</div>
+  <div class="add-form" style="text-align:center">
+    <div id="qrcode" style="display:inline-block;padding:12px;background:#fff;border-radius:12px;margin-bottom:16px"></div>
+    <div style="font-size:12px;color:#555;margin-bottom:16px">{{ customer.name }} · {{ customer.uid }}</div>
+    <button onclick="printCard()" class="add-btn" style="background:#111;color:#fff;border:1px solid #333">הדפס כרטיס</button>
+  </div>
+
   <!-- היסטוריה -->
   <div class="section-title">היסטוריית רכישות</div>
   <div class="purchases-wrap">
@@ -249,5 +258,43 @@
   </div>
 
 </div>
+<script>
+  var uid = "{{ customer.uid }}";
+  var base = window.location.origin;
+  var url = base + "/admin/customer/" + uid;
+
+  new QRCode(document.getElementById("qrcode"), {
+    text: url,
+    width: 160,
+    height: 160,
+    colorDark: "#000",
+    colorLight: "#fff"
+  });
+
+  function printCard() {
+    var name = "{{ customer.name }}";
+    var city = "{{ customer.city }}";
+    var qrImg = document.querySelector("#qrcode img");
+    if (!qrImg) { qrImg = document.querySelector("#qrcode canvas"); }
+    var src = qrImg ? (qrImg.src || qrImg.toDataURL()) : "";
+    var win = window.open("", "_blank");
+    win.document.write(`
+      <html dir="rtl"><head><meta charset="UTF-8">
+      <style>
+        body { font-family: Arial, sans-serif; text-align:center; padding:30px; }
+        h2 { font-size:22px; margin-bottom:4px; }
+        p { color:#888; font-size:13px; margin-bottom:16px; }
+        img { width:160px; height:160px; }
+        .logo { font-size:16px; font-weight:900; letter-spacing:3px; margin-bottom:16px; }
+      </style></head><body>
+      <div class="logo">10FIX כרמיאל</div>
+      <img src="${src}"><br>
+      <h2>${name}</h2>
+      <p>${city}</p>
+      <script>window.print();<\/script>
+      </body></html>
+    `);
+  }
+</script>
 </body>
 </html>
