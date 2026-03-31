@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ customer.name }} - 10FIX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Heebo', Arial, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      direction: rtl;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 24px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .logo { font-size: 18px; font-weight: 900; letter-spacing: 3px; color: #fff; margin-bottom: 4px; }
+    .logo span { color: #888; }
+    .divider { height: 1px; background: #1e1e1e; margin: 20px 0; }
+    .name { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+    .city { font-size: 14px; color: #666; margin-bottom: 24px; }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .info-row:last-of-type { border-bottom: none; }
+    .info-label { font-size: 11px; color: #555; letter-spacing: 1px; font-weight: 700; }
+    .info-value { font-size: 14px; color: #ccc; font-weight: 600; }
+    .badge-yes { background: #1a2e1a; color: #4caf50; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .badge-no  { background: #1e1e1e; color: #666; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .uid { font-size: 11px; color: #333; margin-top: 20px; letter-spacing: 2px; }
+    .back-btn {
+      margin-top: 24px;
+      display: inline-block;
+      color: #555;
+      font-size: 13px;
+      text-decoration: none;
+      border: 1px solid #222;
+      padding: 10px 24px;
+      border-radius: 10px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .back-btn:hover { color: #fff; border-color: #555; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">10<span>FIX</span></div>
+    <div class="divider"></div>
+    <div class="name">{{ customer.name }}</div>
+    <div class="city">{{ customer.city }}</div>
+
+    <div class="info-row">
+      <span class="info-label">טלפון</span>
+      <span class="info-value"><a href="tel:{{ customer.phone }}" style="color:#fff;text-decoration:none">{{ customer.phone }}</a></span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">אימייל</span>
+      <span class="info-value">{{ customer.email or "—" }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">תאריך הצטרפות</span>
+      <span class="info-value">{{ customer.date }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">אישור שיווק</span>
+      <span class="info-value">
+        {% if customer.consent == "כן" %}
+        <span class="badge-yes">כן</span>
+        {% else %}
+        <span class="badge-no">לא</span>
+        {% endif %}
+      </span>
+    </div>
+
+    <div class="uid">ID: {{ customer.uid }}</div>
+  </div>
+
+  <a href="/admin" class="back-btn">← חזרה לרשימה</a>
+</body>
+</html>

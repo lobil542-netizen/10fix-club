@@ -143,6 +143,7 @@
           <th class="col-email">אימייל</th>
           <th>שיווק</th>
           <th class="col-date">תאריך</th>
+          <th>כרטיס</th>
         </tr>
       </thead>
       <tbody>
@@ -160,6 +161,11 @@
             {% endif %}
           </td>
           <td class="td-date col-date">{{ c.date }}</td>
+          <td>
+            {% if c.uid %}
+            <a href="/admin/customer/{{ c.uid }}" style="color:#000;font-size:12px;font-weight:700;border:1px solid #ddd;padding:4px 10px;border-radius:8px;text-decoration:none;white-space:nowrap">פרטים ←</a>
+            {% endif %}
+          </td>
         </tr>
         {% endfor %}
       </tbody>
